@@ -1,0 +1,22 @@
+# ################################################################################
+#
+# Author: Joao Costa
+#
+# Purpose: Provide users with a set of handy functions to simplify their lives.
+#	   The provided functionality will be available in different OSs.
+#
+# Usage:   Source this file:
+#				. ostools
+#
+# ################################################################################
+
+
+function os-function-list
+{
+  declare -F | awk '$3 !~ /^_/ {print $3}' 
+}
+
+function os-function-listSystem
+{
+  declare -F | awk '$3 ~ /^_/ {print $3}' 
+}
