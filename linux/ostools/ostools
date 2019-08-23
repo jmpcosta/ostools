@@ -20,3 +20,46 @@ function os-function-listSystem
 {
   declare -F | awk '$3 ~ /^_/ {print $3}' 
 }
+
+
+function os-process-environment-get
+{
+  typeset pid="$1"
+
+  if [ -z "$pid" ]; then
+       echo "PID missing. Usage:"
+       echo "${FUNCNAME[0]} <PID>"
+       return
+  fi
+
+  if [ ! -d "/proc/${pid}" ]; then
+       echo "A process with PID ${pid} is not running."
+       return
+  fi
+
+  xargs --null --max-args=1 echo < /proc/${pid}/environ
+}
+
+function os-process-commandLine-get
+{
+  typeset pid="$1"
+
+  if [ -z "$pid" ]; then
+       echo "PID missing. Usage:"
+       echo "${FUNCNAME[0]} <PID>"
+       return
+  fi
+
+  if [ ! -d "/proc/${pid}" ]; then
+       echo "A process with PID ${pid} is not running."
+       return
+  fi
+
+  xargs -0 printf '%s\n' < /proc/${pid}/cmdline
+}
+
+# Get current time in seconds since the Epoch
+function os-time-getSeconds
+{
+  date '+%s'
+}
